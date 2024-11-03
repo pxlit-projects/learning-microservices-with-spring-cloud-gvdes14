@@ -12,17 +12,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
 
-    // Todo : Add relations between different relations
+public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    // Todo : Toevoegen van 'relaties' tussen de verschillende services
+    //private Long shopId ;
+    //private Long logId ;
     private String name;
     private String description;
     private double price;
     private String category ;
     private String label ;
+
 
 }

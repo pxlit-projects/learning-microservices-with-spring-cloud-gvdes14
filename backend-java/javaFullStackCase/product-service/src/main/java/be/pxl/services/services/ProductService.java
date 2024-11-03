@@ -5,27 +5,20 @@ import be.pxl.services.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+// todo : Uitbreiden van de methodes in de serivces
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
 
-    // Todo : Map to another response (using build, see employee)
-
     private final ProductRepository productRepository ;
 
     @Override
     public List<Product> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products ;
+        return productRepository.findAll().stream().toList();
     }
-
-    @Override
-    public void addProduct(Product product) {
-    productRepository.save(product);
-    }
-
-
 }
