@@ -20,10 +20,14 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    // Todo : Vragen aan Tom voor meer uitleg over de relatie tussen MS
-    //private List<Product> products = new ArrayList<>();
+    @Transient // Todo : check this again after adding openFeign !
+    private List<Product> products = new ArrayList<>();
     private String clientName;
     private double totalPrice;
-    private Enum cartStatus = Status.CREATED ; // aanmaken van een nieuwe winkelwagen
+    private Status status = Status.CREATED ;
 
+    public void addProduct(Product product) {
+        products.add(product);
+        totalPrice += product.getPrice();
+    }
 }

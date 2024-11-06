@@ -3,7 +3,7 @@ package be.pxl.services.domain;
 
 public enum Status {
     CREATED,
-    FINISHED,
+    ORDERED,
     PAYMENT_FAILED,
     PAYMENT_OK;
 }
