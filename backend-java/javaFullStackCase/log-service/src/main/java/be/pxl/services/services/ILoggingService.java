@@ -2,7 +2,11 @@ package be.pxl.services.services;
 
 import be.pxl.services.domain.Logging;
 
+import java.util.List;
+
 public interface ILoggingService {
 
-    Logging getLog();
+    List<Logging> GetAllLogs();
+
+    void addLog(Logging log);
 }

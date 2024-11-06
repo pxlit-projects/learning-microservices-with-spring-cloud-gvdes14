@@ -1,12 +1,11 @@
 package be.pxl.services.controller;
 
+import be.pxl.services.domain.Logging;
 import be.pxl.services.services.ILoggingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/log")
@@ -16,8 +15,14 @@ public class LoggingController {
     private final ILoggingService loggingService ;
 
     @GetMapping
-    public ResponseEntity GetLog() {
-        return new ResponseEntity(loggingService.getLog(), HttpStatus.OK);
+    public ResponseEntity GetAllLogs() {
+        return new ResponseEntity(loggingService.GetAllLogs(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity AddLog(@RequestBody Logging log) {
+        loggingService.addLog(log);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
 }

@@ -20,8 +20,10 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Transient // Todo : check this again after adding openFeign !
     private List<Product> products = new ArrayList<>();
+
     private String clientName;
     private double totalPrice;
     private Status status = Status.CREATED ;
