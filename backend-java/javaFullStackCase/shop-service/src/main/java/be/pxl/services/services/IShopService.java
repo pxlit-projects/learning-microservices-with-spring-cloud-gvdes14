@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IShopService {
 
-    void addProductToShoppingCart(Long id, Product product);
+    void addProductToShoppingCart(Long id, Long product);
 
     void placeOrder(Long id);
 
@@ -21,5 +21,9 @@ public interface IShopService {
 
     void createEmptyShoppingCart();
 
-    List<Shop> getShoppingCart();
+    Shop getShoppingCartById(Long shopId);
+
+    Shop getShopContent(Long shopId);
+
+    List<Shop> getAllShoppingCarts();
 }

@@ -6,9 +6,7 @@ import be.pxl.services.domain.Status;
 import be.pxl.services.repositories.ShopRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +16,12 @@ public class ShopService implements IShopService {
 
     // Todo : Price is updated, product list is not updated
     @Override
-    public void addProductToShoppingCart(Long id, Product product) {
-        Shop currentShop = shopRepository.findById(id).orElse(null);
+    public void addProductToShoppingCart(Long shopId, Long productId) {
+        Shop currentShop = shopRepository.findById(shopId).orElse(null);
         if (currentShop != null) {
-            currentShop.addProduct(product);
+            currentShop.addProduct(productId);
+        }else {
+            throw new UnsupportedOperationException("Shop not found");
         }
         shopRepository.save(currentShop);
     }
@@ -31,6 +31,8 @@ public class ShopService implements IShopService {
         Shop currentShop = shopRepository.findById(id).orElse(null);
         if (currentShop != null) {
             currentShop.setStatus(Status.ORDERED);
+        } else {
+            throw new UnsupportedOperationException("Shop not found");
         }
         shopRepository.save(currentShop);
     }
@@ -40,6 +42,8 @@ public class ShopService implements IShopService {
         Shop currentShop = shopRepository.findById(id).orElse(null);
         if (currentShop != null) {
             currentShop.setStatus(Status.PAYMENT_OK); // todo : Check when to set payment FAILED, if needed !
+        } else {
+            throw new UnsupportedOperationException("Shop not found");
         }
         shopRepository.save(currentShop);
 
@@ -69,7 +73,22 @@ public class ShopService implements IShopService {
     }
 
     @Override
+    public Shop getShoppingCartById(Long shopId) {
+        return shopRepository.findById(shopId).orElse(null);
+    }
+/*
+    @Override
     public List<Shop> getShoppingCart() {
+        return shopRepository.findAll().stream().toList();
+    }
+*/
+    @Override
+    public Shop getShopContent(Long shopId) {
+        return shopRepository.findById(shopId).orElse(null);
+    }
+
+    @Override
+    public List<Shop> getAllShoppingCarts() {
         return shopRepository.findAll().stream().toList();
     }
 }

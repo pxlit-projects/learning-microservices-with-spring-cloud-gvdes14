@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Logging {
 
-    // Todo : Check if this is the right way to do it !
+    // Todo : Check if this is the right way to do it !É
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)

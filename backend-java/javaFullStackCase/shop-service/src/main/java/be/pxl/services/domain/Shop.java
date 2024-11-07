@@ -21,15 +21,16 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Transient // Todo : check this again after adding openFeign !
-    private List<Product> products = new ArrayList<>();
+    //@Transient // Todo : check this again after adding openFeign !
+    @ElementCollection
+    private List<Long> products = new ArrayList<>() ; // Id's van producten in de cart
 
     private String clientName;
     private double totalPrice;
     private Status status = Status.CREATED ;
 
-    public void addProduct(Product product) {
-        products.add(product);
-        totalPrice += product.getPrice();
+    public void addProduct(Long productId) {
+        products.add(productId);
+
     }
 }

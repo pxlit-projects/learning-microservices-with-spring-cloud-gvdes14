@@ -1,9 +1,10 @@
 package be.pxl.services.controller;
 
+import be.pxl.services.client.ProductClient;
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.Shop;
+import be.pxl.services.repositories.ShopRepository;
 import be.pxl.services.services.IShopService;
-import be.pxl.services.services.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,23 @@ public class ShopController {
 
     // Todo : Toevoegen van het gebruik van DTO's --> Zie lab 1 deel 2
     // Todo : Herschrijven van de endpoints zodat ze de juiste statuscodes teruggeven, NOT_FOUND, CREATED, OK, ...
+    // Todo : Product toevoegen aan de shopping cart door put + id van product mee te geven + amount !
 
 
     private final IShopService shopService;
+    private final ProductClient productClient;
+    private final ShopRepository shopRepository;
+
+    // Ophalen ALLE shopping carts
+    @GetMapping("/all")
+    public ResponseEntity<Shop[]> getAllShoppingCarts() {
+        return new ResponseEntity(shopService.getAllShoppingCarts(), HttpStatus.OK);
+    }
 
     // Ophalen van shopping cart
-    @GetMapping
-    public ResponseEntity<Shop> getShoppingCart() {
-        return new ResponseEntity(shopService.getShoppingCart(), HttpStatus.OK);
+    @GetMapping("/{shopId}")
+    public ResponseEntity<Shop> getShoppingCartById(@PathVariable Long shopId) {
+        return new ResponseEntity(shopService.getShoppingCartById(shopId), HttpStatus.OK);
     }
 
     // Aanmaken van een lege shopping cart
@@ -33,13 +43,19 @@ public class ShopController {
     }
 
     // Plaatsen van product in shopping cart
-    @PutMapping("/{id}/product")
-    public ResponseEntity addProductToShoppingCart(@PathVariable Long id, @RequestBody Product product) {
-        shopService.addProductToShoppingCart(id, product);
-        return new ResponseEntity(HttpStatus.OK);
+    @PutMapping("/{shopId}/product/{productId}")
+    public ResponseEntity<Void> addProductToShoppingCart(@PathVariable Long shopId, @PathVariable Long productId) {
+
+        Shop shop = shopService.getShopContent(shopId);
+        if (shop != null) {
+            Product addProduct = productClient.getProductWithId(productId);
+            shop.addProduct(productId);
+            shopRepository.save(shop);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
-
 
     // Plaatsen van bestelling
     @PostMapping("/order/{id}") // uses the ID from the shopping cart to place the order
