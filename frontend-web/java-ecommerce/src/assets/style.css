@@ -1,0 +1,108 @@
+
+<style scoped>
+.beheerproducten {
+  text-align: center;
+}
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+}
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+nav li {
+  display: inline;
+  margin: 0 15px;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+}
+.add-product {
+  padding: 20px;
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 10px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+button {
+  padding: 10px 20px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #369f6e;
+}
+.featured-products {
+  padding: 20px 0;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.products-container {
+  width: 100%;
+  text-align: center; /* Center-align the heading */
+}
+.products-heading {
+  margin-bottom: 20px;
+}
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center-align the products horizontally */
+}
+.product {
+  border: 1px solid #ddd;
+  padding: 10px;
+  width: 30%;
+  margin: 10px; /* Add margin to space out the products */
+}
+.product img {
+  max-width: 100%;
+}
+.navbar li {
+  display: inline;
+  margin: 0 30px;
+}
+
+div.filter-group {
+    display: inline-flex;
+    justify-content: center;
+    margin:0px 20px;
+}
+div.filter-group label {
+    margin:0px 10px;
+}
+
+.addProductForm {
+    display: inline;
+    align-items: center;
+    width: 80%;
+}
+.addProductForm label {
+    text-align: left;
+    align-items: center;
+}
+.add-product {
+    background-color: #fff;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto  ;
+}
