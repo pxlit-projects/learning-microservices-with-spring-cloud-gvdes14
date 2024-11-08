@@ -21,7 +21,7 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    //@Transient // Todo : check this again after adding openFeign !
+    //@Transient // Todo : check this, should be @Transient
     @ElementCollection
     private List<Long> products = new ArrayList<>() ; // Id's van producten in de cart
 
