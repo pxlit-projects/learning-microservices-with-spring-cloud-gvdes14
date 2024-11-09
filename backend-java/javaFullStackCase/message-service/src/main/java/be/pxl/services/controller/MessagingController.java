@@ -25,6 +25,6 @@ public class MessagingController {
         // todo : Change the obj send via rabbitTemplate.convertAndSend to a custom object
 
         rabbitTemplate.convertAndSend("logQueue", "Hello from MessagingController!");
-    }
 
+    }
 }
