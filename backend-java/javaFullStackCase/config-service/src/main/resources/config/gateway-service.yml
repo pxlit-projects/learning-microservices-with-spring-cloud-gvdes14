@@ -8,7 +8,9 @@ spring:
         corsConfigurations:
           '[/**]':
             allowedOrigins:
-              - "localhost"
+              # Aangepas om de CORS op te lossen voor mijn omgeving !
+              - "http://localhost:8080/beheer"
+              - "http://localhost:8080"
             allowedMethods:
               - "*"
             allowCredentials: true

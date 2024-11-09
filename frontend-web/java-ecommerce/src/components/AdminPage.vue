@@ -17,22 +17,39 @@
           <textarea id="description" v-model="newProduct.description" required></textarea>
         </div>
         <div class="form-group">
-          <label for="picture">Picture</label>
-          <input type="text" id="picture" v-model="newProduct.picture" required />
+          <label for="category">Category</label>
+          <select id="category" v-model="newProduct.category" required class="dropdown-cat">
+            <option value="ELECTRONICS">ELECTRONICS</option>
+            <option value="CLOTHING">CLOTHING</option>
+            <option value="FOOD">FOOD</option>
+            <option value="BOOKS">BOOKS</option>
+            <option value="TOYS">TOYS</option>
+          </select>
         </div>
-        <button type="submit">Toevoegen Product</button>
+        <div class="form-group">
+          <label for="rating">Duurzaamheid (1-5)</label>
+          <select id="rating" v-model="newProduct.rating" required class="dropdown-rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+        <button id="toevoegenProduct" type="submit" class="btn-send" >Toevoegen Product</button>
       </form>
     </section>
     <section class="add-product">
       <h3>Ophalen LogService</h3>
-      <form class="addProductForm" @submit.prevent="addProduct">        
-        <button type="submit">Ophalen Log</button>
+      <form class="GetLogForm" @submit.prevent="GetLog">        
+        <button type="submit" class="btn-send" >Ophalen Log</button>
       </form>
     </section>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import AppHeader from '@/components/AppHeader.vue';
 
 export default {
@@ -51,6 +68,8 @@ export default {
         name: '',
         price: '',
         description: '',
+        category: '', // Add category property
+        rating: '', // Add rating property
         picture: ''
       }
     };
@@ -58,14 +77,22 @@ export default {
   methods: {
     addProduct() {
       const newProduct = {
-        id: this.featuredProducts.length + 1,
         name: this.newProduct.name,
-        price: `$${this.newProduct.price}`,
+        price: this.newProduct.price,
         description: this.newProduct.description,
+        category: this.newProduct.category,
+        rating: this.newProduct.rating,
         image: this.newProduct.picture
       };
-      this.featuredProducts.push(newProduct);
-      this.newProduct = { name: '', price: '', description: '', picture: '' };
+      axios.post('http://localhost:8090/product/api/product', newProduct)
+        .then(response => {
+          console.log('Product added:', response.data);
+          this.featuredProducts.push(response.data);
+          this.newProduct = { name: 'test', price: '105', description: '', category: '', rating: '', picture: '' };
+        })
+        .catch(error => {
+          console.error('Error adding product:', error);
+        });
     },
     addToCart(product) {
       // Logic to add the product to the cart

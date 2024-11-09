@@ -27,6 +27,7 @@ public class Product {
     private double price;
     private Category category ;
     private String label ;
+    private int rating ; // Stelt de 'duurzaamheid' van het product voor
 
 
 }

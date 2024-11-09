@@ -44,41 +44,57 @@
           <div class="products-container">
             <h3 class="products-heading">Beschikbare Producten</h3>
             <div class="products">
-              <div v-for="product in featuredProducts" :key="product.id" class="product">
-                <img :src="product.image" :alt="product.name" />
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.price }}</p>
-                <button @click="addToCart(product)">Add to Cart</button>
-              </div>
+              <div v-for="product in featuredProducts" :key="product.id" class="product-card">
+              <img src="/assets/products/dummy-image.png" :alt="product.name" class="product-image" />
+              <div class="product-details">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">Prijs : {{ product.price }} eur</p>
+                <p class="product-category">Categorie : {{ product.category }}</p>
+                <p class="product-tag">{{ product.tag }}</p>
+                <p class="product-description">{{ product.description }}</p>
+                <p class="product-star">{{ product.star }}</p>
+                <button @click="addToCart(product)" class="add-to-cart-btn">Add to Cart</button>
+              </div>            
             </div>
-          </div>
+          </div></div>
+
         </div>
       </section>
     </div>
   </template>
   
   <script>
+import axios from 'axios';
 import AppHeader from '@/components/AppHeader.vue';
+
 
   export default {
     name: 'HomePage',
     components: {
     AppHeader
   },
-    data() {
-      return {
-        featuredProducts: [
-          { id: 1, name: 'Product 1', price: '$10.00', image: 'assets/products/.jpg' },
-          { id: 2, name: 'Product 2', price: '$10.00', image: 'assets/products/.jpg' },
-          { id: 3, name: 'Product 3', price: '$10.00', image: 'assets/products/.jpg' }
-        ],
-        searchQuery: '',
-        selectedCategory: '',
-        selectedTag: '',
-        selectedPrice: ''
-      };
-    },
+  data() {
+    return {
+      featuredProducts: [],
+      searchQuery: '',
+      selectedCategory: '',
+      selectedTag: '',
+      selectedPrice: ''
+    };
+  },
+  created() {
+    this.fetchProducts();
+  },
     methods: {
+      fetchProducts() {
+      axios.get('http://localhost:8090/product/api/product')
+        .then(response => {
+          this.featuredProducts = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching products:', error);
+        });
+    },
       shopNow() {
         // Logic to navigate to the products page
         console.log('Navigating to products page');
@@ -98,3 +114,69 @@ import AppHeader from '@/components/AppHeader.vue';
     }
   };
   </script>
+
+<style scoped>
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  width: calc(33.333% - 20px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center  ;
+}
+
+.product-image {
+  width: 40%;
+  height: 100%;
+  object-fit: cover;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-details {
+  padding: 15px;
+}
+
+.product-name {
+  font-size: 1.2em;
+  margin: 0 0 10px;
+}
+
+.product-price {
+  color: #e91e63;
+  font-size: 1.1em;
+  margin: 0 0 10px;
+}
+
+.product-category,
+.product-tag,
+.product-description,
+.product-star {
+  margin: 5px;
+  padding: 2px 5px;
+}
+
+.add-to-cart-btn {
+  background-color: #e91e63;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #d81b60;
+}
+</style>

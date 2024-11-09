@@ -14,7 +14,7 @@ public class QueueService {
     public void listen(String in) {
 
         log.info("Message read from logQue : " + in); // Logging to the logfile
-        System.out.println("Message read from logQue : " + in);
+        //System.out.println("Message read from logQue : " + in);
 
     }
 
