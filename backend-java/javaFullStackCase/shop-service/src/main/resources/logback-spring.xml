@@ -14,6 +14,11 @@
     </appender>
     <logger name="be.pxl" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="APP_LOGGER"/>a
+        <appender-ref ref="APP_LOGGER"/>
     </logger>
+    <!-- Spring Boot default logging level is INFO -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP_LOGGER"/>
+    </root>
 </configuration>

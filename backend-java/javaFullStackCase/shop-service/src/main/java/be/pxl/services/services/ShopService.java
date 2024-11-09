@@ -1,10 +1,13 @@
 package be.pxl.services.services;
 
+import be.pxl.services.controller.ProductController;
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.Shop;
 import be.pxl.services.domain.Status;
 import be.pxl.services.repositories.ShopRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -12,9 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShopService implements IShopService {
 
+
+    // Logging ShopService
+    private static final Logger log = LoggerFactory.getLogger(ShopService.class);
+
     private final ShopRepository shopRepository;
 
-    // Todo : Price is updated, product list is not updated
+    // Todo : Price is updated, product list is not updatedede
     @Override
     public void addProductToShoppingCart(Long shopId, Long productId) {
         Shop currentShop = shopRepository.findById(shopId).orElse(null);

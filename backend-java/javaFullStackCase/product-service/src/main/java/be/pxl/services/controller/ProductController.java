@@ -18,6 +18,7 @@ import org.xml.sax.EntityResolver;
 @RequiredArgsConstructor
 public class ProductController {
 
+    // Logging ProductController
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
 
@@ -29,6 +30,7 @@ public class ProductController {
     // Get ALL Products
     @GetMapping
     public ResponseEntity getAllProducts() {
+        log.info("Get all products");
         return new ResponseEntity(productService.getAllProducts(), HttpStatus.OK);
     }
 
@@ -38,8 +40,10 @@ public class ProductController {
         //return new ResponseEntity(productService.getProductWithId(id), HttpStatus.OK);
         Product product = productService.getProductWithId(id);
         if (product != null) {
+            log.info("Product with id " + id + " found");
             return new ResponseEntity<>(product, HttpStatus.OK);
         } else {
+            log.info("Product with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -47,6 +51,7 @@ public class ProductController {
     // Get Product with Category
     @GetMapping("/category/{category}")
     public ResponseEntity<Product> getProductsWithCategory(@PathVariable String category) {
+        log.info("Get all products with category " + category);
         return new ResponseEntity(productService.getProductsWithCategory(category), HttpStatus.OK);
     }
 
@@ -54,6 +59,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addProductToCatalog(@RequestBody Product product) {
+        log.info("Add product to catalog : " + product.getName() +" " + product.getCategory());
         productService.addProductToCatalog(product);
     }
 
@@ -62,8 +68,10 @@ public class ProductController {
     public ResponseEntity<Product> updateProductWithId(@PathVariable Long id, @RequestBody Product updatedProduct) {
         Product product = productService.updateProductWithId(id, updatedProduct);
         if (product != null) {
+            log.info("Product with id " + id + " updated");
             return new ResponseEntity<>(product, HttpStatus.OK);
         } else {
+            log.info("Product with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -72,6 +80,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProductWithId(@PathVariable Long id) {
         productService.deleteProductWithId(id);
+        log.info("Product with id " + id + " deleted");
         return new ResponseEntity(HttpStatus.OK);
     }
 
