@@ -20,8 +20,6 @@ public class ProductController {
 
     // Logging ProductController
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
-
-
     private final IProductService productService ;
 
     // Todo : Toevoegen van het gebruik van DTO's --> Zie lab 1 deel 2
