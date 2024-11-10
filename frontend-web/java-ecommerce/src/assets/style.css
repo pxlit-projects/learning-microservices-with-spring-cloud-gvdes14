@@ -105,4 +105,21 @@ div.filter-group label {
     width: 60%;
     margin-left: auto;
     margin-right: auto  ;
+    margin-top: 20px;
+}
+
+.dropdown-cat,
+.dropdown-rating {
+    width: 100%;
+    padding: 8px;
+
+}
+
+.btn-send {
+    padding: 10px 20px;
+    background-color: #42b983;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
 }

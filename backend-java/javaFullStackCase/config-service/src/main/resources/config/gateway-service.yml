@@ -6,14 +6,15 @@ spring:
     gateway:
       globalcors:
         corsConfigurations:
-          '[/**]':
+          '[/**]': # wildcard for all paths
             allowedOrigins:
-              # Aangepas om de CORS op te lossen voor mijn omgeving !
-              - "http://localhost:8080/beheer"
-              - "http://localhost:8080"
+              - "http://localhost:8080" # Changed localhost to this to fix the problem with CORS
             allowedMethods:
               - "*"
             allowCredentials: true
+            allowedHeaders:
+              - "*" # Changed localhost to this to fix the problem with CORS
+
       discovery:
         locator:
           enabled:true
