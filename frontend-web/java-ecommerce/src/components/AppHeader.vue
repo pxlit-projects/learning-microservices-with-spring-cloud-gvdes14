@@ -5,8 +5,9 @@
       <nav>
         <ul class="navbar">
           <li><router-link to="/">Home</router-link></li>
-          <li>Winkelwagen</li>
+          <li><router-link to="/winkelwagen">Winkelwagen</router-link></li>
           <li><router-link to="/beheer">Beheer</router-link></li>
+
         </ul>
       </nav>
       <nav>

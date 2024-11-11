@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/HomePage.vue';
 import AdminPage from '@/components/AdminPage.vue';
+import ShoppingCart from '@/components/ShoppingCart.vue';
 
 const routes = [
   {
@@ -14,7 +15,12 @@ const routes = [
     name: 'AdminPage',
     component: AdminPage
   },
-  // Voeg hier meer routes toe als dat nodig is
+  {
+    path: '/winkelwagen',
+    name: 'Winkelwagen',
+    component: ShoppingCart
+  },
+
 ];
 
 const router = createRouter({

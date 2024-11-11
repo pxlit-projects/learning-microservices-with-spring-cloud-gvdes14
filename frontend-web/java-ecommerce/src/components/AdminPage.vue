@@ -59,11 +59,7 @@ export default {
   },
   data() {
     return {
-      featuredProducts: [
-        { id: 1, name: 'Product 1', price: '$10.00', image: 'assets/products/.jpg' },
-        { id: 2, name: 'Product 2', price: '$10.00', image: 'assets/products/.jpg' },
-        { id: 3, name: 'Product 3', price: '$10.00', image: 'assets/products/.jpg' }
-      ],
+      featuredProducts: [],
       newProduct: {
         name: '',
         price: '',

@@ -65,6 +65,7 @@
 
 <script>
 import axios from 'axios';
+import Cookies from 'js-cookie'
 import AppHeader from '@/components/AppHeader.vue';
 
 
@@ -103,8 +104,20 @@ export default {
       console.log('Navigating to products page');
     },
     addToCart(product) {
-      // Logic to add the product to the cart
+      let cartId = Cookies.get('cartId');
+      if (!cartId) {
+        cartId = 2; // Todo : get cartId from the server
+        Cookies.set('cartId', cartId, { expires: 7 }); // Set cookie with cart ID, expires in 7 days
+      }
       console.log('Added to cart:', product);
+      // Logic to add the product to the cart using the cartId
+      axios.post(`http://localhost:8093/api/shop/${cartId}`, product)
+        .then(response => {
+          console.log('Product added to cart:', response.data);
+        })
+        .catch(error => {
+          console.error('Error adding product to cart:', error);
+        });
     },
     searchProducts() {
       console.log('Searching for:', this.searchQuery);

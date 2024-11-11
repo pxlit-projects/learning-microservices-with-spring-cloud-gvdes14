@@ -1,0 +1,2 @@
+TODO : Vragen of de logging in de service moet gebeuren of in de controller. Alsook hoeveel details?
+TODO : Moet de filtering in de frotnend gebeuren adhv van de api ? --> voorbeeld voor tags ?
