@@ -13,6 +13,10 @@
           <input type="number" id="price" v-model="newProduct.price" required />
         </div>
         <div class="form-group">
+          <label for="tags">Tags</label>
+          <input id="tags" v-model="newProduct.tags" required placeholder="seperate via ';'" />
+        </div>
+        <div class="form-group">
           <label for="description">Description</label>
           <textarea id="description" v-model="newProduct.description" required></textarea>
         </div>

@@ -1,8 +1,10 @@
 package be.pxl.services.services;
 
-import be.pxl.services.ProductServiceApplication;
+
 import be.pxl.services.domain.Category;
 import be.pxl.services.domain.Product;
+import be.pxl.services.domain.dto.ProductRequest;
+import be.pxl.services.domain.dto.ProductResponse;
 import be.pxl.services.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,7 +19,7 @@ import java.util.Optional;
 public class ProductService implements IProductService {
 
 
-    // Todo : Vragen of een logger in een service moet, elke controller heeft er een
+    // Todo : In elke service een logger toevoegen
 
     // Logging ProductService
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
@@ -25,13 +27,37 @@ public class ProductService implements IProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll().stream().toList();
+    public List<ProductResponse> getAllProducts() {
+        List<Product> allProducts = productRepository.findAll();
+        //return allProducts.stream().map(product -> mapToProductResponse(product)).toList();
+        return allProducts.stream().map(this::mapToProductResponse).toList(); // gebruik maken van een methode referentie
     }
 
+    // Product obj mappen naar een productResponse
+    private ProductResponse mapToProductResponse(Product product) {
+        return ProductResponse.builder()
+                .name(product.getName())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .category(product.getCategory())
+                .label(product.getLabel())
+                .rating(product.getRating())
+                .build();
+    }
+
+    // Add product to catalog using DTO
     @Override
-    public void addProductToCatalog(Product product) {
-        productRepository.save(product);
+    public void addProductToCatalog(ProductRequest productRequest) {
+
+        Product newProduct = Product.builder()
+                .name(productRequest.getName())
+                .description(productRequest.getDescription())
+                .price(productRequest.getPrice())
+                .category(productRequest.getCategory())
+                .label(productRequest.getLabel())
+                .rating(productRequest.getRating())
+                .build();
+        productRepository.save(newProduct);
     }
 
     @Override

@@ -1,17 +1,19 @@
 package be.pxl.services.controller;
 
-import be.pxl.services.ProductServiceApplication;
-import be.pxl.services.domain.Category;
 import be.pxl.services.domain.Product;
+import be.pxl.services.domain.dto.ProductRequest;
+import be.pxl.services.domain.dto.ProductResponse;
 import be.pxl.services.services.IProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
-import org.xml.sax.EntityResolver;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/product")
@@ -22,14 +24,12 @@ public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final IProductService productService ;
 
-    // Todo : Toevoegen van het gebruik van DTO's --> Zie lab 1 deel 2
-    // Todo : Herschrijven van de endpoints zodat ze de juiste statuscodes teruggeven, NOT_FOUND, CREATED, OK, ...
-
-    // Get ALL Products
+    // Get ALL Products via DTO structure
     @GetMapping
-    public ResponseEntity getAllProducts() {
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
         log.info("Get all products");
-        return new ResponseEntity(productService.getAllProducts(), HttpStatus.OK);
+        List<ProductResponse> productResponses = productService.getAllProducts();
+        return new ResponseEntity<>(productResponses, HttpStatus.OK);
     }
 
     // Get Product with ID
@@ -53,24 +53,36 @@ public class ProductController {
         return new ResponseEntity(productService.getProductsWithCategory(category), HttpStatus.OK);
     }
 
-    // Add Product to DB
+    // Add Product to DB via DTO structure
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addProductToCatalog(@RequestBody Product product) {
-        log.info("Add product to catalog : " + product.getName() +" " + product.getCategory());
-        productService.addProductToCatalog(product);
+    public void addProductToCatalog(@Valid @RequestBody ProductRequest productRequest) {
+        log.info("Add product to catalog : " + productRequest.getName() +" " + productRequest.getCategory());
+        productService.addProductToCatalog(productRequest);
     }
 
-    // Update Product in DB
+    // Update Product in DB via DTO structure
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProductWithId(@PathVariable Long id, @RequestBody Product updatedProduct) {
-        Product product = productService.updateProductWithId(id, updatedProduct);
-        if (product != null) {
-            log.info("Product with id " + id + " updated");
-            return new ResponseEntity<>(product, HttpStatus.OK);
-        } else {
+    public ResponseEntity<Product> updateProductWithId(@Valid @PathVariable Long id, @Valid @RequestBody ProductRequest productRequest) {
+        Product productToUpdate = productService.getProductWithId(id);
+        // check if product is found
+        if (productToUpdate == null) {
             log.info("Product with id " + id + " not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            log.info("Product with id " + id + " updated");
+            // Todo : Send notification to logging service over rabbit MQ
+
+            Product toUpdatedProduct = Product.builder()
+                    .name(productRequest.getName())
+                    .description(productRequest.getDescription())
+                    .price(productRequest.getPrice())
+                    .category(productRequest.getCategory())
+                    .label(productRequest.getLabel())
+                    .rating(productRequest.getRating())
+                    .build();
+            Product updatedProduct = productService.updateProductWithId(id, toUpdatedProduct);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         }
     }
 
@@ -81,5 +93,4 @@ public class ProductController {
         log.info("Product with id " + id + " deleted");
         return new ResponseEntity(HttpStatus.OK);
     }
-
 }
