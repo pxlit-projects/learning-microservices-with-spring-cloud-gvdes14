@@ -20,14 +20,11 @@ public class Product {
     private Long id;
 
     // Todo : Toevoegen van 'relaties' tussen de verschillende services
-    //private Long shopId ;
-    //private Long logId ;
     private String name;
     private String description;
     private double price;
     private Category category ;
     private String label ;
     private int rating ; // Stelt de 'duurzaamheid' van het product voor
-
 
 }

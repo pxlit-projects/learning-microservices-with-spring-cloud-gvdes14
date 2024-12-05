@@ -14,11 +14,4 @@ public interface ProductClient {
     @GetMapping("api/product/{id}")
     Product getProductWithId(@PathVariable Long id);
 
-
-/*
-    @PostMapping("api/product")
-    ResponseEntity<Void> addProductToShop(Shop shop, Long productId); //todo : Check why Void is used
-*/
-
-
 }

@@ -1,5 +1,6 @@
 package be.pxl.services.services;
 
+import be.pxl.services.client.ProductClient;
 import be.pxl.services.controller.ProductController;
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.Shop;
@@ -21,15 +22,25 @@ public class ShopService implements IShopService {
 
     private final ShopRepository shopRepository;
 
-    // Todo : Price is updated, product list is not updatedede
     @Override
-    public void addProductToShoppingCart(Long shopId, Long productId) {
+    public Long createEmptyShoppingCart() {
+        Shop emptyShop = new Shop();
+        emptyShop.setStatus(Status.CREATED);
+        Shop createdShop = shopRepository.save(emptyShop);
+        return createdShop.getId();
+    }
+
+    @Override
+    public void addProductToShoppingCart(Long shopId, Product product) {
+
         Shop currentShop = shopRepository.findById(shopId).orElse(null);
+
         if (currentShop != null) {
-            currentShop.addProduct(productId);
+            currentShop.addProduct(product); // currently only adding the product ID
         }else {
-            throw new UnsupportedOperationException("Shop not found");
+            throw new UnsupportedOperationException("Shop or product not found");
         }
+
         shopRepository.save(currentShop);
     }
 
@@ -71,24 +82,13 @@ public class ShopService implements IShopService {
         shopRepository.save(shop);
     }
 
-    @Override
-    public void createEmptyShoppingCart() {
-        // todo : use the builder
-        Shop emptyShop = new Shop();
-        emptyShop.setStatus(Status.CREATED);
-        shopRepository.save(emptyShop);
-    }
+
 
     @Override
     public Shop getShoppingCartById(Long shopId) {
         return shopRepository.findById(shopId).orElse(null);
     }
-/*
-    @Override
-    public List<Shop> getShoppingCart() {
-        return shopRepository.findAll().stream().toList();
-    }
-*/
+
     @Override
     public Shop getShopContent(Long shopId) {
         return shopRepository.findById(shopId).orElse(null);

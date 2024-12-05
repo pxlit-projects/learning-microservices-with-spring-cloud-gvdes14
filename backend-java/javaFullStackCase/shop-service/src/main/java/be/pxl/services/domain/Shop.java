@@ -20,17 +20,22 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long productId;
 
-    //@Transient // Todo : check this, should be @Transient
-    @ElementCollection
-    private List<Long> products = new ArrayList<>() ; // Id's van producten in de cart
-
-    private String clientName;
+    @ElementCollection // Maakt een aparte tabel voor de lijst van product-ID's
+    @CollectionTable(name = "shop_products", joinColumns = @JoinColumn(name = "shop_id"))
+    @Column(name = "product_id")
+    private List<Long> productsInCart = new ArrayList<>() ; // Producten in de cart, enkel ID's
     private double totalPrice;
+
+    @Enumerated(EnumType.STRING) //opslaan als string
     private Status status = Status.CREATED ;
 
-    public void addProduct(Long productId) {
-        products.add(productId);
 
+    public void addProduct(Product productId) {
+        productsInCart.add(productId.getId());
     }
+
 }
+
+

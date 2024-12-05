@@ -74,7 +74,7 @@ public class ProductService implements IProductService {
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
-        return productRepository.findAllByCategory(Category.valueOf(category.toUpperCase())); // Todo : Check if this is correct, rewrite this
+        return productRepository.findAllByCategory(Category.valueOf(category.toUpperCase()));
     }
 
     @Override

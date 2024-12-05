@@ -20,21 +20,16 @@ public class ShopController {
 
     // Logging ShopService
     private static final Logger log = LoggerFactory.getLogger(ShopController.class);
-
-    // Todo : Toevoegen van het gebruik van DTO's --> Zie lab 1 deel 2
-    // Todo : Herschrijven van de endpoints zodat ze de juiste statuscodes teruggeven, NOT_FOUND, CREATED, OK, ...
-    // Todo : Product toevoegen aan de shopping cart door put + id van product mee te geven + amount !
-
-
     private final IShopService shopService;
     private final ProductClient productClient;
     private final ShopRepository shopRepository;
 
-    // Ophalen ALLE shopping carts
-    @GetMapping("/all")
-    public ResponseEntity<Shop[]> getAllShoppingCarts() {
-        log.info("Get all shopping carts");
-        return new ResponseEntity(shopService.getAllShoppingCarts(), HttpStatus.OK);
+    // Aanmaken van een lege shopping cart
+    @PostMapping("/create")
+    public ResponseEntity<Long> createEmptyShoppingCart() {
+        log.info("Create empty shopping cart");
+        Long shopId = shopService.createEmptyShoppingCart();
+        return ResponseEntity.status(HttpStatus.CREATED).body(shopId);
     }
 
     // Ophalen van shopping cart
@@ -44,29 +39,25 @@ public class ShopController {
         return new ResponseEntity(shopService.getShoppingCartById(shopId), HttpStatus.OK);
     }
 
-    // Aanmaken van een lege shopping cart
-    @PostMapping
-    public void createEmptyShoppingCart() { // Todo : Create an empty shopping cart using the builder
-        log.info("Create empty shopping cart");
-        shopService.createEmptyShoppingCart();
-    }
 
     // Plaatsen van product in shopping cart
     @PutMapping("/{shopId}/product/{productId}")
     public ResponseEntity<Void> addProductToShoppingCart(@PathVariable Long shopId, @PathVariable Long productId) {
 
-        Shop shop = shopService.getShopContent(shopId);
-        if (shop != null) {
-            Product addProduct = productClient.getProductWithId(productId);
-            shop.addProduct(productId);
-            shopRepository.save(shop);
-            log.info("Product with id " + productId + " added to shopping cart with id " + shopId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            log.info("Shopping cart with id " + shopId + " not found");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Product product = productClient.getProductWithId(productId); // user openfeign to get product
+        Shop shop = shopService.getShoppingCartById(shopId);
+        log.info("Add product with id " + productId + " to shopping cart with id " + shopId);
+        shopService.addProductToShoppingCart(shopId, product);
+
+        /*
+        return new ResponseEntity(
+                shopService.addProductToShoppingCart(shop.getId(), product),
+                HttpStatus.OK);
+                */
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+
 
     // Plaatsen van bestelling
     @PostMapping("/order/{id}") // uses the ID from the shopping cart to place the order
@@ -95,5 +86,14 @@ public class ShopController {
         shopService.removeProductFromShoppingCart(product);
         log.info("Remove product : " + product.getId() + " " + product.getName() +" from shopping cart");
     }
+
+        /* Enkel gebruikt om te testen
+    // Ophalen ALLE shopping carts
+    @GetMapping("/all")
+    public ResponseEntity<Shop[]> getAllShoppingCarts() {
+        log.info("Get all shopping carts");
+        return new ResponseEntity(shopService.getAllShoppingCarts(), HttpStatus.OK);
+    }*/
+
 
 }

@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,7 +59,7 @@ public class ProductTests
     private static MySQLContainer sqlContainer = new MySQLContainer("mysql:5.7")
             .withDatabaseName("productdb") ;
 
-    // Aanpassen van de source die verwijst naar de database
+    // Aanpassen van de bron die verwijst naar de database
     @DynamicPropertySource
     static void registerDatabaseProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", sqlContainer::getJdbcUrl);
@@ -66,7 +67,7 @@ public class ProductTests
         registry.add("spring.datasource.password", sqlContainer::getPassword);
     }
 
-    // Testen openomen in deze klasse
+    // Testen opgenomen in deze klasse
     // 1. Aanmaken van een product
     // 2. Ophalen van een product via ID
     // 3. Ophalen van producten met een bepaalde categorie
