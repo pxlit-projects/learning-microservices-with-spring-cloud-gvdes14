@@ -89,6 +89,7 @@ export default {
     };
   },
   created() {
+    this.createCookie();
     this.isLoggedInCookie();
     this.fetchProducts();
   },
@@ -106,6 +107,7 @@ export default {
       }, {});
       return cookies[name] !== undefined;
     },
+
     fetchProducts() {
       axios.get('http://localhost:8090/product/api/product')
           .then(response => {
@@ -116,6 +118,20 @@ export default {
           .catch(error => {
             console.error('Error fetching products:', error);
           });
+    },
+    createCookie() {
+      let cartId = Cookies.get('cartId');
+      if (!cartId) {
+        // create a new cart on server
+        axios.post(`http://localhost:8090/shop/api/shop/create`)
+            .then(response => {
+              console.log('Cart created:', response.data);
+              Cookies.set('cartId', response.data, {expires: 7}); // Set cookie with cart ID, expires in 7 days
+            })
+            .catch(error => {
+              console.error('Error creating cart:', error);
+            });
+      }
     },
     addToCart(product) {
       let cartId = Cookies.get('cartId');
