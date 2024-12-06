@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'AppHeader',
   data() {
@@ -63,10 +65,22 @@ export default {
       }, {});
       return cookies[name] !== undefined;
     },
+    fetchProducts() {
+      axios.get('http://localhost:8090/product/api/product')
+          .then(response => {
+            this.featuredProducts = response.data;
+            this.filteredProducts = [...this.featuredProducts];
+            console.log('Products fetched:', this.featuredProducts);
+          })
+          .catch(error => {
+            console.error('Error fetching products:', error);
+          });
+    },
     handleLoginToggle() {
       if (this.isLoggedIn) {
         // User will be logged in, create cookie
         this.setCookie('userCookie', 'loggedIn', 20);
+
       } else {
         // User will be logged out, remove cookie
         this.removeCookie('userCookie');

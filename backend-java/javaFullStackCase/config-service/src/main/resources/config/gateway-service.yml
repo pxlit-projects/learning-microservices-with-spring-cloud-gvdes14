@@ -27,7 +27,7 @@ spring:
             predicates:
               - Path=/log/**
             filters:
-              - RewritePath=/log/(?<path>.*), /$\{path}a
+              - RewritePath=/log/(?<path>.*), /$\{path}
         -   id: product-service
             uri: lb://product-service
             predicates:

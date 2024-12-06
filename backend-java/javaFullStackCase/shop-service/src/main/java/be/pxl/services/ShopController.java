@@ -1,11 +1,10 @@
-package be.pxl.services.controller;
+package be.pxl.services;
 
 import be.pxl.services.client.ProductClient;
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.Shop;
 import be.pxl.services.repositories.ShopRepository;
 import be.pxl.services.services.IShopService;
-import be.pxl.services.services.ShopService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,6 @@
 package be.pxl.services.services;
 
 import be.pxl.services.client.ProductClient;
-import be.pxl.services.controller.ProductController;
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.Shop;
 import be.pxl.services.domain.Status;
@@ -62,7 +61,7 @@ public class ShopService implements IShopService {
     public void placePayment(Long id) {
         Shop currentShop = shopRepository.findById(id).orElse(null);
         if (currentShop != null) {
-            currentShop.setStatus(Status.PAYMENT_OK); // todo : Check when to set payment FAILED, if needed !
+            currentShop.setStatus(Status.PAYMENT_OK);
         } else {
             throw new UnsupportedOperationException("Shop not found");
         }

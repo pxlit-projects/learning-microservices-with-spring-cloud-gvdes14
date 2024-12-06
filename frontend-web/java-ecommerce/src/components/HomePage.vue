@@ -54,6 +54,9 @@
                 <p class="product-description">{{ product.description }}</p>
                 <p class="product-star">{{ product.star }}</p>
                 <button @click="addToCart(product)" class="add-to-cart-btn">Add to Cart</button>
+                <button v-if="isLoggedIn" @click="editProduct(product)" class="add-to-cart-btn edit-btn"
+                        style="margin: 5px">Edit
+                </button>
               </div>
             </div>
           </div>
@@ -81,14 +84,28 @@ export default {
       searchQuery: '',
       selectedCategory: '',
       selectedTag: '',
-      selectedPrice: ''
+      selectedPrice: '',
+      isLoggedIn: false
     };
   },
   created() {
-    this.createCookie();
+    this.isLoggedInCookie();
     this.fetchProducts();
   },
   methods: {
+    isLoggedInCookie() {
+      console.log('Checking if user is logged in');
+      this.isLoggedIn = this.checkCookie('userCookie');
+    },
+    checkCookie(name) {
+      const cookieString = document.cookie;
+      const cookies = cookieString.split('; ').reduce((acc, cookie) => {
+        const [key, value] = cookie.split('=');
+        acc[key] = value;
+        return acc;
+      }, {});
+      return cookies[name] !== undefined;
+    },
     fetchProducts() {
       axios.get('http://localhost:8090/product/api/product')
           .then(response => {
@@ -112,20 +129,6 @@ export default {
             console.error('Error adding product to cart:', error);
           });
     },
-    createCookie() {
-      let cartId = Cookies.get('cartId');
-      if (!cartId) {
-        // create a new cart on server
-        axios.post(`http://localhost:8090/shop/api/shop/create`)
-            .then(response => {
-              console.log('Cart created:', response.data);
-              Cookies.set('cartId', response.data, {expires: 7}); // Set cookie with cart ID, expires in 7 days
-            })
-            .catch(error => {
-              console.error('Error creating cart:', error);
-            });
-      }
-    },
     searchProducts() {
       console.log('Searching for:', this.searchQuery);
 
@@ -143,6 +146,10 @@ export default {
       // Logic to filter products
       console.log('Filtering products');
     },
+    editProduct(product) {
+      console.log('Editing product:', product);
+      this.$router.push({ name: 'EditProduct', query: { id: product.id } });
+    }
   }
 };
 </script>
@@ -199,7 +206,7 @@ export default {
 }
 
 .add-to-cart-btn {
-  background-color: #e91e63;
+  background-color: #45a049;
   color: #fff;
   border: none;
   padding: 10px;
@@ -208,7 +215,12 @@ export default {
   transition: background-color 0.3s;
 }
 
+.edit-btn {
+  background-color: #f57c00;
+}
+
 .add-to-cart-btn:hover {
-  background-color: #d81b60;
+  background-color: #2c3e50;
+  color: #dddddd;
 }
 </style>

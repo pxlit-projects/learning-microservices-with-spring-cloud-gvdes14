@@ -1,6 +1,7 @@
-package be.pxl.services.controller;
+package be.pxl.services;
 
 import be.pxl.services.domain.Logging;
+import be.pxl.services.domain.dto.LoggingResponse;
 import be.pxl.services.services.ILoggingService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/log")
@@ -20,9 +23,11 @@ public class LoggingController {
     private final ILoggingService loggingService ;
 
     @GetMapping
-    public ResponseEntity GetAllLogs() {
+    public ResponseEntity<List<LoggingResponse>> GetAllLogs() {
         log.info("Get all logs");
-        return new ResponseEntity(loggingService.GetAllLogs(), HttpStatus.OK);
+        List<LoggingResponse> loggingResponses = loggingService.GetAllLogs();
+        return new ResponseEntity<>(loggingResponses, HttpStatus.OK);
+        //return new ResponseEntity(loggingService.GetAllLogs(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -31,5 +36,4 @@ public class LoggingController {
         loggingService.addLog(logs);
         return new ResponseEntity(HttpStatus.CREATED);
     }
-
 }

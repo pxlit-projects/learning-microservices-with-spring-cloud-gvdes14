@@ -1,4 +1,4 @@
-package be.pxl.services;
+package be.pxl.services.controller;
 
 import be.pxl.services.domain.Category;
 import be.pxl.services.domain.Product;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Testcontainers
 @AutoConfigureMockMvc
-public class ProductTests
+public class ProductControllerTests
 {
     @BeforeEach
     void setUp() {

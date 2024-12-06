@@ -1,4 +1,4 @@
-package be.pxl.services.controller;
+package be.pxl.services;
 
 import be.pxl.services.domain.Product;
 import be.pxl.services.domain.dto.ProductRequest;
