@@ -37,6 +37,7 @@ public class ShopService implements IShopService {
 
         if (currentShop != null) {
             currentShop.addProduct(productId);
+            currentShop.setTotalPrice(currentShop.getTotalPrice() + product.getPrice());
             log.info("Adding product to shopping cart: " + product.getName());
         }else {
             throw new UnsupportedOperationException("Shop or product not found");

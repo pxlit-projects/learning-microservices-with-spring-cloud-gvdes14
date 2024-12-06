@@ -4,6 +4,8 @@ import Home from '../components/HomePage.vue';
 import AdminPage from '@/components/AdminPage.vue';
 import ShoppingCart from '@/components/ShoppingCart.vue';
 import OrderConfirmation from '@/components/OrderConfirmation.vue';
+import PaymentConfirmation from "@/components/PaymentConfirmation.vue";
+import EditProduct from "@/components/EditProduct.vue";
 
 
 const routes = [
@@ -23,10 +25,20 @@ const routes = [
     component: ShoppingCart
   },
   {
-    path: '/winkelwagen',
+    path: '/orderconfirmation',
     name: 'OrderConfirmation',
     component: OrderConfirmation
   },
+  {
+    path: '/paymentconfirmation',
+    name: 'PaymentConfirmation',
+    component: PaymentConfirmation
+  },
+  {
+    path: '/editproduct',
+    name: 'EditProduct',
+    component: EditProduct
+  }
 
 ];
 

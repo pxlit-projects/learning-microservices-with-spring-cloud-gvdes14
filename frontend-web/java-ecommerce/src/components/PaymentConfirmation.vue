@@ -4,16 +4,7 @@
     <section class="confirmation">
       <h3>Betaalbevestiging</h3>
       <p>Bedankt, {{ customer.name }}!</p>
-      <p>Uw betaling voor bestelnummer <strong>#{{ orderId }}</strong> is succesvol verwerkt.</p>
-
-      <div class="payment-details">
-        <h4>Betaalgegevens:</h4>
-        <ul>
-          <li><strong>Totaalbedrag:</strong> {{ totalAmount }} EUR</li>
-          <li><strong>Betaald met:</strong> {{ paymentMethod }}</li>
-          <li><strong>Datum:</strong> {{ paymentDate }}</li>
-        </ul>
-      </div>
+      <p>Uw betaling is succesvol verwerkt.</p>
 
       <div class="return-actions">
         <button @click="returnToHome" class="return-button">Ga naar Home</button>
