@@ -13,7 +13,10 @@ spring:
               - "*"
             allowCredentials: true
             allowedHeaders:
-              - "*" # Changed localhost to this to fix the problem with CORS
+#              - "*" # Changed localhost to this to fix the problem with CORS
+              - "Content-Type"
+              - "Authorization"
+              - "X-Requested-With"
 
       discovery:
         locator:
@@ -24,7 +27,7 @@ spring:
             predicates:
               - Path=/log/**
             filters:
-              - RewritePath=/log/(?<path>.*), /$\{path}
+              - RewritePath=/log/(?<path>.*), /$\{path}a
         -   id: product-service
             uri: lb://product-service
             predicates:

@@ -19,7 +19,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // Todo : Toevoegen van 'relaties' tussen de verschillende services
+    private Long shopId; // id van de shop
     private String name;
     private String description;
     private double price;

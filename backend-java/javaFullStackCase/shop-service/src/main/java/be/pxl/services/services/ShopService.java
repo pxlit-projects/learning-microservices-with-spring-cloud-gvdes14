@@ -36,7 +36,9 @@ public class ShopService implements IShopService {
         Shop currentShop = shopRepository.findById(shopId).orElse(null);
 
         if (currentShop != null) {
-            currentShop.addProduct(product); // currently only adding the product ID
+            //currentShop.addProduct(product); // currently only adding the product ID
+            log.info("Adding product to shopping cart: " + product.getName());
+
         }else {
             throw new UnsupportedOperationException("Shop or product not found");
         }

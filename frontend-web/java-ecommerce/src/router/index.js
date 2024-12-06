@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/HomePage.vue';
 import AdminPage from '@/components/AdminPage.vue';
 import ShoppingCart from '@/components/ShoppingCart.vue';
+import OrderConfirmation from '@/components/OrderConfirmation.vue';
+
 
 const routes = [
   {
@@ -19,6 +21,11 @@ const routes = [
     path: '/winkelwagen',
     name: 'Winkelwagen',
     component: ShoppingCart
+  },
+  {
+    path: '/winkelwagen',
+    name: 'OrderConfirmation',
+    component: OrderConfirmation
   },
 
 ];

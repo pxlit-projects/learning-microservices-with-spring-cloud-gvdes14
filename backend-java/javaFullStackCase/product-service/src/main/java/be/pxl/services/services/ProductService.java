@@ -36,6 +36,7 @@ public class ProductService implements IProductService {
     // Product obj mappen naar een productResponse
     private ProductResponse mapToProductResponse(Product product) {
         return ProductResponse.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())

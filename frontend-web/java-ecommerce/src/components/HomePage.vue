@@ -45,7 +45,7 @@
             <div v-for="product in filteredProducts" :key="product.id" class="product-card">
               <img src="/assets/products/dummy-image.png" :alt="product.name" class="product-image" />
               <div class="product-details">
-                <h3 class="product-name">{{ product.name }}</h3>
+                <h3 class="product-name">{{ product.name }} - id ({{ product.id}})</h3>
                 <p class="product-price">Prijs : {{ product.price }} eur</p>
                 <p class="product-category">Categorie : {{ product.category }}</p>
                 <p class="product-tag">{{ product.tag }}</p>
@@ -106,12 +106,18 @@ export default {
     addToCart(product) {
       let cartId = Cookies.get('cartId');
       if (!cartId) {
-        cartId = 2; // Todo : get cartId from the server
-        Cookies.set('cartId', cartId, { expires: 7 }); // Set cookie with cart ID, expires in 7 days
+        // create a new cart on server
+        axios.post(`http://localhost:8090/shop/api/shop/create`)
+          .then(response => {
+            console.log('Cart created:', response.data);
+            Cookies.set('cartId', response.data, { expires: 7 }); // Set cookie with cart ID, expires in 7 days
+          })
+          .catch(error => {
+            console.error('Error creating cart:', error);
+          });
       }
-      console.log('Added to cart:', product);
-      // Logic to add the product to the cart using the cartId
-      axios.post(`http://localhost:8093/api/shop/${cartId}`, product)
+      //console.log('Added to cart:', product.id);
+      axios.put(`http://localhost:8090/shop/api/shop/${cartId}/product/${product.id}`)
         .then(response => {
           console.log('Product added to cart:', response.data);
         })
