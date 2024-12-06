@@ -1,6 +1,6 @@
 <template>
   <div class="beheerproducten">
-    <AppHeader />
+    <AppHeader/>
     <section class="featured-products">
       <aside class="filters">
         <h3>Filter Producten</h3>
@@ -13,13 +13,14 @@
             <!-- Add more categories as needed -->
           </select>
         </div>
+        <!--
         <div class="filter-group">
           <label for="tag">Tag</label>
           <select id="tag" v-model="selectedTag" @change="filterProducts">
             <option value="">All</option>
             <option value="tag1">Tag 1</option>
             <option value="tag2">Tag 2</option>
-            <!-- Add more tags as needed -->
+
           </select>
         </div>
         <div class="filter-group">
@@ -30,12 +31,13 @@
             <option value="high">High to Low</option>
           </select>
         </div>
+        -->
         <div class="filter-group">
           <button @click="filterProducts">Apply Filters</button>
         </div>
         <div class="filter-group" style="margin-left: 0px;">
-          <input class="search-field" type="text" placeholder="Zoek product..." v-model="searchQuery" @input="searchProducts"/>
-          
+          <input class="search-field" type="text" placeholder="Zoek product..." v-model="searchQuery"
+                 @input="searchProducts"/>
         </div>
       </aside>
       <div class="content">
@@ -43,9 +45,9 @@
           <h3 class="products-heading">Beschikbare Producten</h3>
           <div class="products">
             <div v-for="product in filteredProducts" :key="product.id" class="product-card">
-              <img src="/assets/products/dummy-image.png" :alt="product.name" class="product-image" />
+              <img src="/assets/products/dummy-image.png" :alt="product.name" class="product-image"/>
               <div class="product-details">
-                <h3 class="product-name">{{ product.name }} - id ({{ product.id}})</h3>
+                <h3 class="product-name">{{ product.name }} - id ({{ product.id }})</h3>
                 <p class="product-price">Prijs : {{ product.price }} eur</p>
                 <p class="product-category">Categorie : {{ product.category }}</p>
                 <p class="product-tag">{{ product.tag }}</p>
@@ -55,9 +57,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </section>
   </div>
@@ -85,45 +85,46 @@ export default {
     };
   },
   created() {
+    this.createCookie();
     this.fetchProducts();
   },
   methods: {
     fetchProducts() {
       axios.get('http://localhost:8090/product/api/product')
-        .then(response => {
-          this.featuredProducts = response.data;
-          this.filteredProducts = [...this.featuredProducts];
-          console.log('Products fetched:', this.featuredProducts);
-        })
-        .catch(error => {
-          console.error('Error fetching products:', error);
-        });
-    },
-    shopNow() {
-      // Logic to navigate to the products page
-      console.log('Navigating to products page');
+          .then(response => {
+            this.featuredProducts = response.data;
+            this.filteredProducts = [...this.featuredProducts];
+            console.log('Products fetched:', this.featuredProducts);
+          })
+          .catch(error => {
+            console.error('Error fetching products:', error);
+          });
     },
     addToCart(product) {
+      let cartId = Cookies.get('cartId');
+      //console.log('Added to cart:', product.id);
+      axios.put(`http://localhost:8090/shop/api/shop/${cartId}/product/${product.id}`)
+          .then(response => {
+            console.log('Product added to cart:', response.data);
+            alert("Artikel toegevoegd aan winkelwagen");
+          })
+          .catch(error => {
+            console.error('Error adding product to cart:', error);
+          });
+    },
+    createCookie() {
       let cartId = Cookies.get('cartId');
       if (!cartId) {
         // create a new cart on server
         axios.post(`http://localhost:8090/shop/api/shop/create`)
-          .then(response => {
-            console.log('Cart created:', response.data);
-            Cookies.set('cartId', response.data, { expires: 7 }); // Set cookie with cart ID, expires in 7 days
-          })
-          .catch(error => {
-            console.error('Error creating cart:', error);
-          });
+            .then(response => {
+              console.log('Cart created:', response.data);
+              Cookies.set('cartId', response.data, {expires: 7}); // Set cookie with cart ID, expires in 7 days
+            })
+            .catch(error => {
+              console.error('Error creating cart:', error);
+            });
       }
-      //console.log('Added to cart:', product.id);
-      axios.put(`http://localhost:8090/shop/api/shop/${cartId}/product/${product.id}`)
-        .then(response => {
-          console.log('Product added to cart:', response.data);
-        })
-        .catch(error => {
-          console.error('Error adding product to cart:', error);
-        });
     },
     searchProducts() {
       console.log('Searching for:', this.searchQuery);
@@ -141,7 +142,7 @@ export default {
     filterProducts() {
       // Logic to filter products
       console.log('Filtering products');
-    }
+    },
   }
 };
 </script>

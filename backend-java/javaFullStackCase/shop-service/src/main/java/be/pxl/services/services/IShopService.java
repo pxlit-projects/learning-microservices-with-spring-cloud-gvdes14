@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IShopService {
 
-    void addProductToShoppingCart(Long id, Product product);
+    void addProductToShoppingCart(Long id, Long productId);
 
     void placeOrder(Long id);
 
@@ -15,7 +15,8 @@ public interface IShopService {
 
     void updateProductInShoppingCart(Product product);
 
-    void removeProductFromShoppingCart(Product product);
+    void removeProductFromShoppingCart(Long shopId, Long productId);
+
 
     void createShoppingCart(Shop shop);
 

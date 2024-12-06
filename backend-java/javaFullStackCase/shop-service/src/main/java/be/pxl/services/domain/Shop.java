@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -20,20 +21,17 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-/*
-    @ElementCollection
-    @CollectionTable(name = "shop_products", joinColumns = @JoinColumn(name = "shop_id"))
-    @Column(name = "product_id")
-
- */
-
-    @Transient
-    private List<Product> productIds; // Opslag van product-ID's in de winkel
-
+    private List<Long> productIds = new ArrayList<>(); // Opslag van product-ID's in de winkel
     private double totalPrice;
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    // Toevoegen van product aan winkel
+    public void addProduct(Long productId) {
+        productIds.add(productId);
+    }
+
+    public void removeProduct(Long productId) {
+        productIds.remove(productId);
+    }
 }
-
-

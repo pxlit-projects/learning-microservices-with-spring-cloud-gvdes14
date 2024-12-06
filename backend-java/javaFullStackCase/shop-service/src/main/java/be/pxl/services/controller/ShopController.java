@@ -39,25 +39,13 @@ public class ShopController {
         return new ResponseEntity(shopService.getShoppingCartById(shopId), HttpStatus.OK);
     }
 
-
     // Plaatsen van product in shopping cart
     @PutMapping("/{shopId}/product/{productId}")
     public ResponseEntity<Void> addProductToShoppingCart(@PathVariable Long shopId, @PathVariable Long productId) {
-
-        Product product = productClient.getProductWithId(productId); // user openfeign to get product
-        Shop shop = shopService.getShoppingCartById(shopId);
         log.info("Add product with id " + productId + " to shopping cart with id " + shopId);
-        shopService.addProductToShoppingCart(shopId, product);
-
-        /*
-        return new ResponseEntity(
-                shopService.addProductToShoppingCart(shop.getId(), product),
-                HttpStatus.OK);
-                */
+        shopService.addProductToShoppingCart(shopId, productId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
 
     // Plaatsen van bestelling
     @PostMapping("/order/{id}") // uses the ID from the shopping cart to place the order
@@ -81,10 +69,10 @@ public class ShopController {
     }
 
     // Verwijderen van een product in de shopping cart
-    @DeleteMapping
-    public void removeProductFromShoppingCart(@RequestBody Product product) {
-        shopService.removeProductFromShoppingCart(product);
-        log.info("Remove product : " + product.getId() + " " + product.getName() +" from shopping cart");
+    @DeleteMapping("/{shopId}/product/{productId}")
+    public void removeProductFromShoppingCart(@PathVariable Long shopId, @PathVariable Long productId) {
+        shopService.removeProductFromShoppingCart(shopId, productId);
+        log.info("Remove product : " + productId + " from shopping cart");
     }
 
         /* Enkel gebruikt om te testen

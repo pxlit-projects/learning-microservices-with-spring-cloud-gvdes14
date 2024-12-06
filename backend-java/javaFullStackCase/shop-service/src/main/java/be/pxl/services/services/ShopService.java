@@ -16,11 +16,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShopService implements IShopService {
 
-
     // Logging ShopService
     private static final Logger log = LoggerFactory.getLogger(ShopService.class);
-
-    private final ShopRepository shopRepository;
+    private final ProductClient productClient;
+        private final ShopRepository shopRepository;
 
     @Override
     public Long createEmptyShoppingCart() {
@@ -31,18 +30,17 @@ public class ShopService implements IShopService {
     }
 
     @Override
-    public void addProductToShoppingCart(Long shopId, Product product) {
+    public void addProductToShoppingCart(Long shopId, Long productId) {
 
         Shop currentShop = shopRepository.findById(shopId).orElse(null);
+        Product product = productClient.getProductWithId(productId);
 
         if (currentShop != null) {
-            //currentShop.addProduct(product); // currently only adding the product ID
+            currentShop.addProduct(productId);
             log.info("Adding product to shopping cart: " + product.getName());
-
         }else {
             throw new UnsupportedOperationException("Shop or product not found");
         }
-
         shopRepository.save(currentShop);
     }
 
@@ -51,6 +49,8 @@ public class ShopService implements IShopService {
         Shop currentShop = shopRepository.findById(id).orElse(null);
         if (currentShop != null) {
             currentShop.setStatus(Status.ORDERED);
+
+            currentShop.setTotalPrice(currentShop.getTotalPrice());
         } else {
             throw new UnsupportedOperationException("Shop not found");
         }
@@ -75,8 +75,19 @@ public class ShopService implements IShopService {
     }
 
     @Override
-    public void removeProductFromShoppingCart(Product product) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public void removeProductFromShoppingCart(Long shopId, Long productId) {
+
+        Shop currentShop = shopRepository.findById(shopId).orElse(null);
+        Product product = productClient.getProductWithId(productId);
+
+        if (currentShop != null) {
+            currentShop.removeProduct(productId);
+            log.info("Removing product from shopping cart: " + product.getName());
+        } else {
+            throw new UnsupportedOperationException("Shop or product not found");
+        }
+        shopRepository.save(currentShop);
+
     }
 
     @Override
