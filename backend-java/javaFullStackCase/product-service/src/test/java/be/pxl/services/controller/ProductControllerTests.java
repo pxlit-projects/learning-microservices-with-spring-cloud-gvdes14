@@ -1,5 +1,6 @@
 package be.pxl.services.controller;
 
+import be.pxl.services.ProductServiceApplication;
 import be.pxl.services.domain.Category;
 import be.pxl.services.domain.Product;
 import be.pxl.services.repository.ProductRepository;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest (classes = ProductServiceApplication.class)
 @Testcontainers
 @AutoConfigureMockMvc
 public class ProductControllerTests

@@ -60,13 +60,14 @@ public class ShopController {
         log.info("Place payment with id " + id);
     }
 
+    /*
     // Aanpassen van een product in de shopping cart
     @PutMapping
     public void updateProductInShoppingCart(@RequestBody Product product) {
         shopService.updateProductInShoppingCart(product);
         log.info("Update product : " + product.getId() + " " + product.getName() +" in shopping cart");
     }
-
+*/
     // Verwijderen van een product in de shopping cart
     @DeleteMapping("/{shopId}/product/{productId}")
     public void removeProductFromShoppingCart(@PathVariable Long shopId, @PathVariable Long productId) {
@@ -74,13 +75,6 @@ public class ShopController {
         log.info("Remove product : " + productId + " from shopping cart");
     }
 
-        /* Enkel gebruikt om te testen
-    // Ophalen ALLE shopping carts
-    @GetMapping("/all")
-    public ResponseEntity<Shop[]> getAllShoppingCarts() {
-        log.info("Get all shopping carts");
-        return new ResponseEntity(shopService.getAllShoppingCarts(), HttpStatus.OK);
-    }*/
 
 
 }
