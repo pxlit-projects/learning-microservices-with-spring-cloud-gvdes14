@@ -89,8 +89,8 @@ public class ShopControllerTest
     }
 
     // Test 3, toevoegen van een product aan een shopping cart
-    @Test
-    public void testAddProductToShoppingCart() throws Exception {
+   // @Test
+    //public void testAddProductToShoppingCart() throws Exception {
         /*
         // Arrange: Create and save a shop (shopping cart)
         Shop cart = new Shop();
@@ -132,7 +132,7 @@ public class ShopControllerTest
         assertEquals(1, updatedCart.getProductIds().size());
          */
         // Todo : implement this test
-    }
+    //}
 
     // Test 4, plaatsen van een bestelling
     @Test
