@@ -67,7 +67,7 @@ public class ShopControllerTest
     // Testen die worden voorzien
     // 1. Testen of een lege shopping cart kan worden aangemaakt (/create)
     // 2. Testen of een shopping cart kan worden opgehaald (/{shopId})
-    // 3. Testen of een product kan worden toegevoegd aan een shopping cart (/{shopId}/product/{productId})
+    // 3. Testen of een product kan worden toegevoegd aan een shopping cart (/{shopId}/product/{productId}) // Todo : implement this
     // 4. Testen of een bestelling kan worden geplaatst (/order/{id})
     // 5. Testen of een betaling kan worden geplaatst (/payment/{id})
     // 6. Testen of een item kan worden verwijderd uit een shopping cart
@@ -131,7 +131,6 @@ public class ShopControllerTest
         assertNotNull(updatedCart);
         assertEquals(1, updatedCart.getProductIds().size());
          */
-        // Todo : implement this test
     //}
 
     // Test 4, plaatsen van een bestelling

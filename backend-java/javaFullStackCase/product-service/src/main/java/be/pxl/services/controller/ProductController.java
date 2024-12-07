@@ -4,10 +4,13 @@ import be.pxl.services.domain.Product;
 import be.pxl.services.domain.dto.ProductRequest;
 import be.pxl.services.domain.dto.ProductResponse;
 import be.pxl.services.services.IProductService;
+import com.netflix.discovery.converters.Auto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,9 @@ import java.util.List;
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
 public class ProductController {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     // Logging ProductController
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
@@ -71,7 +77,6 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else {
             log.info("Product with id " + id + " updated");
-            // Todo : Send notification to logging service over rabbit MQ
 
             Product toUpdatedProduct = Product.builder()
                     .name(productRequest.getName())
@@ -81,7 +86,65 @@ public class ProductController {
                     .label(productRequest.getLabel())
                     .rating(productRequest.getRating())
                     .build();
+
+            StringBuilder changes = new StringBuilder("Changes: ");
+            if (!productToUpdate.getName().equals(toUpdatedProduct.getName())) {
+                changes.append("Name changed from '")
+                        .append(productToUpdate.getName())
+                        .append("' to '")
+                        .append(toUpdatedProduct.getName())
+                        .append("'. ");
+            }
+            if (!productToUpdate.getDescription().equals(toUpdatedProduct.getDescription())) {
+                changes.append("Description changed from '")
+                        .append(productToUpdate.getDescription())
+                        .append("' to '")
+                        .append(toUpdatedProduct.getDescription())
+                        .append("'. ");
+            }
+
+            // double --> String
+            String price1 = String.valueOf(productToUpdate.getPrice());
+            String price2 = String.valueOf(toUpdatedProduct.getPrice());
+            if (!price1.equals(price2)) {
+                changes.append("Price changed from '")
+                        .append(price1)
+                        .append("' to '")
+                        .append(price2)
+                        .append("'. ");
+            }
+            if (!productToUpdate.getCategory().equals(toUpdatedProduct.getCategory())) {
+                changes.append("Category changed from '")
+                        .append(productToUpdate.getCategory())
+                        .append("' to '")
+                        .append(toUpdatedProduct.getCategory())
+                        .append("'. ");
+            }
+            if (!productToUpdate.getLabel().equals(toUpdatedProduct.getLabel())) {
+                changes.append("Label changed from '")
+                        .append(productToUpdate.getLabel())
+                        .append("' to '")
+                        .append(toUpdatedProduct.getLabel())
+                        .append("'. ");
+            }
+            String rating1 = String.valueOf(productToUpdate.getRating());
+            String rating2 = String.valueOf(toUpdatedProduct.getRating());
+            if (!rating1.equals(rating2)) {
+                changes.append("Rating changed from '")
+                        .append(productToUpdate.getRating())
+                        .append("' to '")
+                        .append(toUpdatedProduct.getRating())
+                        .append("'. ");
+            }
+
+            String result = changes.toString();
+
             Product updatedProduct = productService.updateProductWithId(id, toUpdatedProduct);
+
+            // versturen testbericht
+            rabbitTemplate.convertAndSend("logQueue",result);
+            log.info("Message send : " + result);
+
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         }
     }
