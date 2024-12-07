@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,7 +88,7 @@ public class ProductController {
                     .rating(productRequest.getRating())
                     .build();
 
-            StringBuilder changes = new StringBuilder("Changes: ");
+            StringBuilder changes = new StringBuilder();
             if (!productToUpdate.getName().equals(toUpdatedProduct.getName())) {
                 changes.append("Name changed from '")
                         .append(productToUpdate.getName())
@@ -136,17 +137,29 @@ public class ProductController {
                         .append(toUpdatedProduct.getRating())
                         .append("'. ");
             }
-            changes.append(";")
-                    .append(id);
+
+
+            if (changes.length() > 0){
+                changes.append(";")
+                        .append(id);
+            }
+
             String result = changes.toString();
 
             log.info(result);
             Product updatedProduct = productService.updateProductWithId(id, toUpdatedProduct);
 
             // versturen testbericht
-            rabbitTemplate.convertAndSend("logQueue",result);
-            log.info("Message send : " + result); // send id to log-service
+            //rabbitTemplate.convertAndSend("logQueue",result);
 
+            if (!changes.isEmpty()) {
+                rabbitTemplate.convertAndSend("logQueue", result, message -> {
+                    message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                    return message;
+                });
+
+                log.info("Message send : " + result); // send id to log-service
+            }
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         }
     }

@@ -13,6 +13,6 @@ public class QueueConfiguration {
     public static final String QUEUE = "logQueue";
     @Bean
     public Queue queue() {
-        return new Queue(QUEUE, false); // Berichten worden verwijderd bij stoppen van de applicatie
+        return new Queue(QUEUE, true); // Berichten worden verwijderd bij stoppen van de applicatie
     }
 }
