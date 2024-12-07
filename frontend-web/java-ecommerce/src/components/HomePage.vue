@@ -8,8 +8,11 @@
           <label for="category">Category</label>
           <select id="category" v-model="selectedCategory" @change="filterProducts">
             <option value="">All</option>
-            <option value="category1">Category 1</option>
-            <option value="category2">Category 2</option>
+            <option value="ELECTRONICS">ELECTRONICS</option>
+            <option value="CLOTHING">CLOTHING</option>
+            <option value="FOOD">FOOD</option>
+            <option value="BOOKS">BOOKS</option>
+            <option value="TOYS">TOYS</option>
             <!-- Add more categories as needed -->
           </select>
         </div>
@@ -32,9 +35,6 @@
           </select>
         </div>
         -->
-        <div class="filter-group">
-          <button @click="filterProducts">Apply Filters</button>
-        </div>
         <div class="filter-group" style="margin-left: 0px;">
           <input class="search-field" type="text" placeholder="Zoek product..." v-model="searchQuery"
                  @input="searchProducts"/>
@@ -52,7 +52,7 @@
                 <p class="product-category">Categorie : {{ product.category }}</p>
                 <p class="product-tag">{{ product.tag }}</p>
                 <p class="product-description">{{ product.description }}</p>
-                <p class="product-star">{{ product.star }}</p>
+                <p class="product-star">{{ product.label }}</p>
                 <button @click="addToCart(product)" class="add-to-cart-btn">Add to Cart</button>
                 <button v-if="isLoggedIn" @click="editProduct(product)" class="add-to-cart-btn edit-btn"
                         style="margin: 5px">Edit
@@ -154,13 +154,24 @@ export default {
       } else {
         // If there's a search query, filter products by name
         this.filteredProducts = this.featuredProducts.filter(product => {
-          return product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+          const query = this.searchQuery.toLowerCase();
+          return product.name.toLowerCase().includes(query) ||
+              (product.label && product.label.toLowerCase().includes(query));
         });
       }
     },
     filterProducts() {
-      // Logic to filter products
-      console.log('Filtering products');
+      console.log('Filtering products by category:', this.selectedCategory);
+
+      if (this.selectedCategory === '') {
+        // Als geen categorie is geselecteerd, toon alle producten
+        this.filteredProducts = [...this.featuredProducts];
+      } else {
+        // Filter producten op basis van de geselecteerde categorie
+        this.filteredProducts = this.featuredProducts.filter(product =>
+            product.category.toLowerCase() === this.selectedCategory.toLowerCase()
+        );
+      }
     },
     editProduct(product) {
       console.log('Editing product:', product);

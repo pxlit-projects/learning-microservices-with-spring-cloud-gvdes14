@@ -57,7 +57,6 @@
         <table>
           <thead>
           <tr>
-            <th>Log ID</th>
             <th>Product ID</th>
             <th>Username</th>
             <th>Description</th>
@@ -67,11 +66,10 @@
           <tbody>
           <!-- Beperk de weergave tot de laatste 10 logs -->
           <tr v-for="log in receivedLogs" :key="log.id">
-            <td>{{ log.id }}</td>
             <td>{{ log.productId }}</td>
             <td>{{ log.username }}</td>
             <td>{{ log.description }}</td>
-            <td>{{ log.datetime }}</td>
+            <td>{{ formatDate(log.dateTime) }}</td>
           </tr>
           </tbody>
         </table>
@@ -112,6 +110,10 @@ export default {
     };
   },
   methods: {
+    formatDate(dateTime) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      return new Date(dateTime).toLocaleDateString('nl-NL', options);
+      },
     addProduct() {
       const newProduct = {
         name: this.newProduct.name,

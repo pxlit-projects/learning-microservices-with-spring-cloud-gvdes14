@@ -21,11 +21,17 @@ public class LogConsumer {
     public void listen(String in) {
 
         System.out.println("Message read from logQueue : " + in);
-        Logging newLoggin = new Logging();
-        newLoggin.setUsername("admin");
-        newLoggin.setDescription(in);
-        newLoggin.setDateTime(LocalDateTime.now());
-        loggingService.addLog(newLoggin);
+
+        // Id uit string halen
+        String[] parts = in.split(";");
+        Long id = Long.parseLong(parts[1]);
+
+        Logging newLogging = new Logging();
+        newLogging.setProductId(id); // todo aanpassen
+        newLogging.setUsername("admin");
+        newLogging.setDescription(parts[0]);
+        newLogging.setDateTime(LocalDateTime.now());
+        loggingService.addLog(newLogging);
 
     }
 }

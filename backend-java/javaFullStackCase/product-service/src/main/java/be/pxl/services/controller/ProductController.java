@@ -136,14 +136,16 @@ public class ProductController {
                         .append(toUpdatedProduct.getRating())
                         .append("'. ");
             }
-
+            changes.append(";")
+                    .append(id);
             String result = changes.toString();
 
+            log.info(result);
             Product updatedProduct = productService.updateProductWithId(id, toUpdatedProduct);
 
             // versturen testbericht
             rabbitTemplate.convertAndSend("logQueue",result);
-            log.info("Message send : " + result);
+            log.info("Message send : " + result); // send id to log-service
 
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         }
